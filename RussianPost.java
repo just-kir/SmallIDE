@@ -22,12 +22,12 @@ public class RussianPost {
 		
 	}
 	
+	
+	
+	
 	public void send(String name, String msg) {
-		int i=0;
-		MsgRcvr rc = null;
-		System.out.println((new Integer(5)).toString());
 		IncPost.get(name).handle(msg);
-		}
+	}
 
 
 
