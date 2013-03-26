@@ -16,7 +16,7 @@ public class RussianPost {
 		ArrayList<MsgRcvr> sub = new ArrayList<MsgRcvr>();
 		OutPost.put(name, sub); // adding note in OutPost 
 		
-		OutBox newbox = new OutBox(name);
+		OutBox newbox = new OutBox(sub);
 		return newbox;
 	} 
 	
