@@ -7,7 +7,17 @@ public class Main {
 	 */
 	public static void main(String[] args) throws ConflictException{
 		MainFrame mf = new MainFrame();
-		Module m = new Module(mf) {
+		RussianPost rp = new RussianPost(); //added Russian post
+		
+		///// module testing
+		AlphaModule am = new AlphaModule(mf, rp);
+		BetaModule bm = new BetaModule(mf,rp);
+		GammaModule gm = new GammaModule(mf, rp);
+		/////
+		
+		
+		
+		Module m = new Module(mf, rp) {
 			@Override
 			public void menuClick(int index) {
 				System.out.println("fuck "+index);

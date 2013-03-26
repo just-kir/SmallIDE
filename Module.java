@@ -1,9 +1,12 @@
 
 public abstract class Module {
-	private MainFrame mainframe;
+	protected MainFrame mainframe;
+	protected RussianPost russianpost;
 	
-	public Module(MainFrame mf){
+	
+	public Module(MainFrame mf, RussianPost rp){
 		mainframe = mf;
+		russianpost = rp; // added russian post in constructor
 	}
 	
 	public void menuClick(int index){
