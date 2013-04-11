@@ -8,16 +8,17 @@ public class Main {
 	public static void main(String[] args) throws ConflictException{
 		MainFrame mf = new MainFrame();
 		RussianPost rp = new RussianPost(); //added Russian post
+		Configuration conf = new Configuration();
 		
-		///// module testing
-		AlphaModule am = new AlphaModule(mf, rp);
-		BetaModule bm = new BetaModule(mf,rp);
-		GammaModule gm = new GammaModule(mf, rp);
+		///// modules for testing
+		AlphaModule am = new AlphaModule(mf, rp, conf);
+		BetaModule bm = new BetaModule(mf,rp, conf);
+		GammaModule gm = new GammaModule(mf, rp, conf);
 		/////
 		
 		
 		
-		Module m = new Module(mf, rp) {
+		Module m = new Module(mf, rp, conf) {
 			@Override
 			public void menuClick(int index) {
 				System.out.println("fuck "+index);

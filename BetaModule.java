@@ -2,8 +2,8 @@ import java.util.concurrent.TimeUnit;
 
 public class BetaModule extends Module implements MsgRcvr{
 
-	public BetaModule(MainFrame mf, RussianPost rp){
-		super(mf, rp);
+	public BetaModule(MainFrame mf, RussianPost rp, Configuration conf){
+		super(mf, rp, conf);
 		
 		////rp testing
 		rp.send("kitty", "Hey from beta-module!"); // it works!

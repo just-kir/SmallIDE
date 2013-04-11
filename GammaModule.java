@@ -2,8 +2,8 @@
 
 public class GammaModule extends Module implements MsgRcvr{
 
-	public GammaModule(MainFrame mf, RussianPost rp){
-		super(mf, rp);
+	public GammaModule(MainFrame mf, RussianPost rp, Configuration conf){
+		super(mf, rp, conf);
 		// russian post testing
 		try {
 					Thread.sleep(5000);
