@@ -1,6 +1,7 @@
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
+import javax.swing.Icon;
 import javax.swing.JButton;
 
 
@@ -13,8 +14,8 @@ public class ToolButton extends JButton implements ActionListener {
 	private Module m;
 	private int index;
 	
-	public ToolButton(String text, int index, Module m) {
-		super(text);
+	public ToolButton(Icon icon, int index, Module m) {
+		super(icon);
 		this.m = m;
 		this.index= index;
 		addActionListener(this);

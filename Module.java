@@ -1,6 +1,6 @@
 
 public abstract class Module {
-	private MainFrame mainframe;
+	protected MainFrame mainframe;
 	
 	public Module(MainFrame mf){
 		mainframe = mf;
