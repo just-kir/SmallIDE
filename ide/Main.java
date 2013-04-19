@@ -1,8 +1,12 @@
+package ide;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.plaf.nimbus.NimbusLookAndFeel;
+
+import mainframe.GraphicsModule;
+import mainframe.MainFrame;
 
 import com.sun.java.swing.plaf.gtk.GTKLookAndFeel;
 import com.sun.java.swing.plaf.motif.MotifLookAndFeel;
@@ -21,7 +25,20 @@ public class Main {
 	public static void main(String[] args) throws ConflictException, UnsupportedLookAndFeelException{
 		//UIManager.setLookAndFeel(new com.sun.java.swing.plaf.gtk.GTKLookAndFeel());
 		MainFrame mf = new MainFrame();
-		GraphicsModule m = new GraphicsModule(mf) {
+
+		RussianPost rp = new RussianPost(); //added Russian post
+		Configuration conf = new Configuration();
+		
+		///// modules for testing
+		/*AlphaModule am = new AlphaModule(mf, rp, conf);
+		BetaModule bm = new BetaModule(mf,rp, conf);
+		GammaModule gm = new GammaModule(mf, rp, conf);*/
+		/////
+		
+		
+		
+		GraphicsModule m = new GraphicsModule(mf, rp, conf) {
+
 			@Override
 			public void menuClick(int index) {
 				System.out.println("fuck "+index);

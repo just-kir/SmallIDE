@@ -1,3 +1,4 @@
+package ide;
 
 public class ConflictException extends Exception {
 

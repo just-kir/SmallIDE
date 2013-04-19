@@ -1,3 +1,8 @@
+package mainframe;
+
+import ide.ConflictException;
+import ide.Module;
+
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Graphics;
