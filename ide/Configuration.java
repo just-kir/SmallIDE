@@ -15,10 +15,15 @@ public class Configuration implements Serializable{
 			// exception
 		}
 	}
+	
+	public void ser_staff(){
+		
+	}
 
-	public void add(Module self, Object forserialize) {
+
+	public void add(Module self, String objname, Object forserialize) {
 		// add variable for serialization and serializing SysConf
-		//SysConf.get(self).add(forserialize); // be carefull!
+		sysConf.get(self).put(objname, forserialize); // be carefull!
 		try {
 			ObjectOutputStream os = new ObjectOutputStream (new FileOutputStream("SysConf.ser")); // not sure about it
 			os.writeObject(sysConf); // writing object
@@ -28,15 +33,18 @@ public class Configuration implements Serializable{
 		}
 	}
 	
-	public Object get(Module name, Object objname) { // not working yet
+	public Object get(Module name, String objname) { // should work!
 		Object c = null;
-		// Restore and give away	
+		// Restoring	
 		try {
 			ObjectInputStream is = new ObjectInputStream(new FileInputStream("SysConf.ser"));
 			sysConf =(Hashtable) is.readObject(); // makes some unsefty things
+			
 		} catch(Exception ex) {
 			// exception
 		}
+		// giving away
+		c = sysConf.get(name).get(objname);
 		
 		
 		return c;
