@@ -1,4 +1,5 @@
 package ide;
+
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.UIManager;
@@ -7,6 +8,8 @@ import javax.swing.plaf.nimbus.NimbusLookAndFeel;
 
 import mainframe.GraphicsModule;
 import mainframe.MainFrame;
+
+import test.ConfTestModule;
 
 import com.sun.java.swing.plaf.gtk.GTKLookAndFeel;
 import com.sun.java.swing.plaf.motif.MotifLookAndFeel;
@@ -30,6 +33,7 @@ public class Main {
 		Configuration conf = new Configuration();
 		
 		///// modules for testing
+		ConfTestModule ctm = new ConfTestModule(mf, rp, conf);
 		/*AlphaModule am = new AlphaModule(mf, rp, conf);
 		BetaModule bm = new BetaModule(mf,rp, conf);
 		GammaModule gm = new GammaModule(mf, rp, conf);*/
