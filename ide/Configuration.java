@@ -4,7 +4,7 @@ import java.util.*;
 
 public class Configuration implements Serializable{
 
-	private Hashtable<Module, Hashtable<String, Object>> sysConf = new Hashtable<Module, Hashtable<String, Object>>();
+	private Hashtable<String, Hashtable<String, Object>> sysConf = new Hashtable<String, Hashtable<String, Object>>();
 	
 	public Configuration() {
 		// trying to fill SysConf
@@ -14,35 +14,59 @@ public class Configuration implements Serializable{
 		} catch(Exception ex) {
 			// exception
 		}
+		System.out.println(sysConf);
 	}
+
 	
-	public void ser_staff(){
-		
-	}
-
-
-	public void add(Module self, String objname, Object forserialize) {
-		// add variable for serialization and serializing SysConf
-		sysConf.get(self).put(objname, forserialize); // be carefull!
+	public void toExit(){
 		try {
 			ObjectOutputStream os = new ObjectOutputStream (new FileOutputStream("SysConf.ser")); // not sure about it
 			os.writeObject(sysConf); // writing object
 			os.close();
 		} catch(IOException ex) {
 			// exception!
+			ex.printStackTrace();
+		}		
+	}
+
+
+
+	public void add(String self, String objname, Object forserialize) {
+		// add variable for serialization and serializing SysConf
+		sysConf.get(self).put(objname, forserialize); // be carefull!
+		/*System.out.println(sysConf); //it works.
+		try {
+			ObjectOutputStream os = new ObjectOutputStream (new FileOutputStream("SysConf.ser")); // not sure about it
+			os.writeObject(sysConf); // writing object
+			os.close();
+		} catch(IOException ex) {
+			// exception!
+			ex.printStackTrace();
 		}
+		
+		sysConf = null;
+		try {
+			ObjectInputStream is = new ObjectInputStream(new FileInputStream("SysConf.ser"));
+			sysConf =(Hashtable) is.readObject(); // makes some unsefty things
+		} catch(Exception ex) {
+			ex.printStackTrace();// exception
+		}
+		System.out.println(sysConf);
+		*/
+		
+		
 	}
 	
-	public Object get(Module name, String objname) { // should work!
+	public Object get(String name, String objname) { // should work!
 		Object c = null;
 		// Restoring	
-		try {
+		/*try {
 			ObjectInputStream is = new ObjectInputStream(new FileInputStream("SysConf.ser"));
 			sysConf =(Hashtable) is.readObject(); // makes some unsefty things
 			
 		} catch(Exception ex) {
 			// exception
-		}
+		}*/
 		// giving away
 		c = sysConf.get(name).get(objname);
 		
@@ -50,7 +74,7 @@ public class Configuration implements Serializable{
 		return c;
 	}
 	
-	public boolean ask(Module self) {
+	public boolean ask(String self) {
 		boolean c = false;
 		if (sysConf.get(self) != null) {
 			c = true;
@@ -58,9 +82,9 @@ public class Configuration implements Serializable{
 		return c;
 	}
 	
-	public void register(Module self){
+	public void register(String self){
 		Hashtable<String, Object> myobjects = new Hashtable<String, Object>();
 		sysConf.put(self, myobjects); // register module 
-	
+		
 	}
 }

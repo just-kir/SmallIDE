@@ -10,6 +10,7 @@ import mainframe.GraphicsModule;
 import mainframe.MainFrame;
 
 import test.ConfTestModule;
+import test.ConstructorTest;
 
 import com.sun.java.swing.plaf.gtk.GTKLookAndFeel;
 import com.sun.java.swing.plaf.motif.MotifLookAndFeel;
@@ -32,8 +33,10 @@ public class Main {
 		RussianPost rp = new RussianPost(); //added Russian post
 		Configuration conf = new Configuration();
 		
+		
 		///// modules for testing
 		ConfTestModule ctm = new ConfTestModule(mf, rp, conf);
+		ConstructorTest con =  new ConstructorTest();
 		/*AlphaModule am = new AlphaModule(mf, rp, conf);
 		BetaModule bm = new BetaModule(mf,rp, conf);
 		GammaModule gm = new GammaModule(mf, rp, conf);*/

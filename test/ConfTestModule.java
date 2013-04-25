@@ -1,4 +1,8 @@
 package test;
+
+import java.io.*;
+import java.util.*;
+import java.lang.*;
 import ide.Configuration;
 import ide.Module;
 import ide.RussianPost;
@@ -11,22 +15,45 @@ public class ConfTestModule extends Module {
 		super(mf, rp, conf);
 		
 		// ask-register test
-		boolean c = conf.ask(this);
+		String className = this.getClass().getName();
+		boolean c = conf.ask(className);
 		System.out.println(c);
-		conf.register(this);
-		c = conf.ask(this);
+		conf.register(className);
+		c = conf.ask(className);
 		System.out.println(c);
 		
-		
+		//add-get test
 		int counts = 200;
-		conf.add(this, "counts", counts);
+		conf.add(className, "counts", counts);
 		int counts1 = 0;
 		try {
-			counts1 = (int) conf.get(this, "counts");
+			counts1 = (int) conf.get(className, "counts");
 		} catch(Exception ex) {
 		
 		}
-		System.out.println(counts1);
+		/*System.out.println(counts1);
+		String serTest = "hellooo-o!";
+		try {
+			ObjectOutputStream os = new ObjectOutputStream (new FileOutputStream("SerTest.txt")); // not sure about it
+			os.writeObject(serTest); // writing object
+			os.close();
+		} catch(IOException ex) {
+			// exception!
+		}
+		serTest = "Noooo-ooo!";
+		try {
+			ObjectOutputStream os = new ObjectOutputStream (new FileOutputStream("SerTest.txt")); // not sure about it
+			os.writeObject(serTest); // writing object
+			os.close();
+		} catch(IOException ex) {
+			// exception!
+		}
+		
+		*/
+		
+		// input-output-stream tests
+		
+		
 	
 	}
 }
