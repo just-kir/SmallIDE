@@ -12,13 +12,13 @@ public class ConstructorTest {
 			BufferedReader reader = new BufferedReader(fileReader);
 			String line = reader.readLine();
 			System.out.println(line);
-			// good reading!
-			
-			
-			
+			// good reading!	
 		} catch (Exception ex){
 			ex.printStackTrace();
 		}
+		// some magic
+		//Class c = Class.forName(line);
+		//c tt = new c(mf, rp, conf);
 	}
 	
 	public String ReadName(){
