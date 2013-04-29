@@ -9,8 +9,14 @@ import mainframe.MainFrame;
 
 public class AlphaModule extends Module implements MsgRcvr{
 
+	public AlphaModule(){
+		super(null,null,null);
+		System.out.println("FUCK!");
+	}
+
 	public AlphaModule(MainFrame mf, RussianPost rp, Configuration conf){
 		super(mf, rp, conf);
+		System.out.println("Fuck me right now");
 		// russian post testing
 		rp.addIncPostBox("kitty", this);
 		// fuck! System.out.println(rp.IncPost.get("kitty")); // it works!
