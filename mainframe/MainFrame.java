@@ -2,6 +2,8 @@ package mainframe;
 
 import ide.ConflictException;
 import ide.Module;
+import ide.OutBox;
+import ide.RussianPost;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
@@ -20,13 +22,16 @@ import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
 import javax.swing.SwingUtilities;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 
 
-public class MainFrame implements Runnable{
+public class MainFrame implements Runnable, ChangeListener{
 	public static final int TOP = 1;
 	public static final int BOTTOM = 2;
 	public static final int LEFT = 3;
 	public static final int RIGHT = 4;
+	
 	private JFrame frame;
 	private JMenuBar menubar;
 	private JToolBar buttonPanel;
@@ -37,10 +42,15 @@ public class MainFrame implements Runnable{
 	private JTabbedPane right;
 	private JTabbedPane top;
 	private JTabbedPane bottom;
+	
 	private int menuIndex = 0;
 	private int buttonIndex = 0;
 	
-	public MainFrame() {
+	private RussianPost rp;
+	private OutBox topChange;
+	
+	public MainFrame(RussianPost rp) {
+		this.rp = rp;
 		try {
 			SwingUtilities.invokeAndWait(this);
 		} catch (InvocationTargetException e) {
@@ -50,6 +60,10 @@ public class MainFrame implements Runnable{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+	}
+	
+	public final JFrame getFrame() {
+		return frame;
 	}
 	
 	@Override
@@ -76,32 +90,18 @@ public class MainFrame implements Runnable{
 		
 		frame.add(northPanel, BorderLayout.NORTH);
 		
-		leftAndOthers = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-		leftAndOthers.setDividerSize(5);
-		leftAndOthers.setDividerLocation(0.2);
-		leftAndOthers.setResizeWeight(0.2);
-		leftAndOthers.setContinuousLayout(true);
-		rightAndCenter = new JSplitPane(JSplitPane.HORIZONTAL_SPLIT);
-		rightAndCenter.setDividerSize(5);
-		rightAndCenter.setDividerLocation(1-0.2/0.8);
-		rightAndCenter.setResizeWeight(1-0.2/0.8);
-		rightAndCenter.setContinuousLayout(true);
-		topAndBottom = new JSplitPane(JSplitPane.VERTICAL_SPLIT);
-		topAndBottom.setDividerSize(5);
-		topAndBottom.setDividerLocation(0.8);
-		topAndBottom.setResizeWeight(0.8);
-		topAndBottom.setContinuousLayout(true);
+		topChange = rp.addOutPostBox("topChange");
+		
 		top = new JTabbedPane();
+		top.addChangeListener(this);
 		bottom = new JTabbedPane();
 		left = new JTabbedPane();
 		right = new JTabbedPane();
 		
-		topAndBottom.setTopComponent(top);
-		topAndBottom.setBottomComponent(bottom);
-		rightAndCenter.setLeftComponent(topAndBottom);
-		rightAndCenter.setRightComponent(right);
-		leftAndOthers.setLeftComponent(left);
-		leftAndOthers.setRightComponent(rightAndCenter);
+		topAndBottom = new SplitPane(top, bottom, JSplitPane.VERTICAL_SPLIT, SplitPane.LEFT, 0.8);
+		rightAndCenter = new SplitPane(topAndBottom, right, JSplitPane.HORIZONTAL_SPLIT, SplitPane.LEFT, 1-0.2/0.8);
+		leftAndOthers = new SplitPane(left, rightAndCenter, JSplitPane.HORIZONTAL_SPLIT, SplitPane.RIGHT, 0.2);
+		
 		
 		//top.addTab("top1", new JLabel("fuck1"));
 		//bottom.addTab("bottom1", new JLabel("fuck2"));
@@ -111,7 +111,8 @@ public class MainFrame implements Runnable{
 		frame.add(leftAndOthers,BorderLayout.CENTER);
 		
 		frame.setVisible(true);
-		System.out.println("done");
+		
+		
 	}
 	
 	public int addMenu(String path, Module m) throws ConflictException{
@@ -208,6 +209,56 @@ public class MainFrame implements Runnable{
 		JPanel res = new JPanel();
 		z.addTab(name, res);
 		z.setTabComponentAt(z.indexOfComponent(res), tc);
+		z.setSelectedComponent(res);
 		return res;
+	}
+	
+	public void setActiveTab(JPanel tab, int where){
+		JTabbedPane z;
+		switch(where){
+		case TOP:
+			z = top;
+			break;
+		case BOTTOM:
+			z = bottom;
+			break;
+		case LEFT:
+			z = left;
+			break;
+		case RIGHT:
+			z = right;
+			break;
+		default:
+			z = bottom;
+			break;
+		}
+		z.setSelectedComponent(tab);
+	}
+	
+	public JPanel getActiveTab(int where){
+		JTabbedPane z;
+		switch(where){
+		case TOP:
+			z = top;
+			break;
+		case BOTTOM:
+			z = bottom;
+			break;
+		case LEFT:
+			z = left;
+			break;
+		case RIGHT:
+			z = right;
+			break;
+		default:
+			z = bottom;
+			break;
+		}
+		return (JPanel)z.getSelectedComponent();
+	}
+
+	@Override
+	public void stateChanged(ChangeEvent arg0) {
+		topChange.putAndSend(getActiveTab(TOP));
 	}
 }

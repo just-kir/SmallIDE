@@ -35,7 +35,7 @@ public class BetaModule extends Module implements MsgRcvr{
 		t.start();
 	}
 	
-	public void handle(String msg) {
+	public void handle(Object msg) {
 	}
 
 }

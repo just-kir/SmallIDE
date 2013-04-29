@@ -20,7 +20,7 @@ public class GammaModule extends Module implements MsgRcvr{
 		// here or in Main()
 	}
 	
-	public void handle(String msg) {
+	public void handle(Object msg) {
 		System.out.println(msg);
 	
 	}

@@ -8,6 +8,10 @@ public class ButtonTabComponent extends JPanel {
     private final JTabbedPane pane;
     private GraphicsModule module;
  
+    public JTabbedPane getPane() {
+		return pane;
+	}
+    
     public ButtonTabComponent(final JTabbedPane pane, GraphicsModule gm) {
         super(new FlowLayout(FlowLayout.LEFT, 0, 0));
         if (pane == null) {
@@ -51,12 +55,10 @@ public class ButtonTabComponent extends JPanel {
  
         public void actionPerformed(ActionEvent e) {
             int i = pane.indexOfTabComponent(ButtonTabComponent.this);
-            ButtonTabComponent.this.module.onTabClose();
-            if(pane.getTabCount() == 0){
-            	
-            }
             if (i != -1) {
-                pane.remove(i);
+            	boolean stop = ButtonTabComponent.this.module.onTabClose(ButtonTabComponent.this.getPane().getComponentAt(i));
+                if(!stop) 
+                	pane.remove(i);
             }
         }
  

@@ -2,7 +2,7 @@ package ide;
 import java.util.*;
 
 
-public class RussianPost {
+public class RussianPost{
 	
 	private Hashtable<String, MsgRcvr> IncPost = new Hashtable<String, MsgRcvr>();
 	
@@ -28,7 +28,7 @@ public class RussianPost {
 	
 	
 	
-	public void send(String name, String msg) {
+	public void send(String name, Object msg) {
 		IncPost.get(name).handle(msg);
 	}
 

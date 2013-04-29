@@ -1,6 +1,6 @@
 package ide;
-public interface MsgRcvr {
+public interface MsgRcvr{
 	
-	public void handle (String Msg);
+	public void handle (Object Msg);
 
 }
