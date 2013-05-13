@@ -103,7 +103,8 @@ public class TextEditor extends GraphicsModule{
 		
 		@Override
 		protected void processKeyEvent(KeyEvent e) {
-			if(pm != null && pm.isShown() && e.getKeyCode() != KeyEvent.VK_DOWN && e.getKeyCode() != KeyEvent.VK_UP && e.getKeyCode() != KeyEvent.VK_ESCAPE && e.getKeyCode() != KeyEvent.VK_ENTER){
+		
+			if(e.getKeyCode() == KeyEvent.VK_UNDEFINED && pm != null && pm.isShown() && e.getKeyCode() != KeyEvent.VK_DOWN && e.getKeyCode() != KeyEvent.VK_UP && e.getKeyCode() != KeyEvent.VK_ESCAPE && e.getKeyCode() != KeyEvent.VK_ENTER){
 				pm.hide();
 			}
 			super.processKeyEvent(e);

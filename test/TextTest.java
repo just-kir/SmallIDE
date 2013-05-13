@@ -18,7 +18,6 @@ import javax.swing.text.*;
 public class TextTest extends Module implements MsgRcvr,DocumentListener, PopupListener{
 	private Document doc;
 	private TextFile tf;
-	private int pos;
 	
 	public TextTest(MainFrame mf, RussianPost rp, Configuration conf){
 		super(mf, rp, conf);
@@ -33,10 +32,6 @@ public class TextTest extends Module implements MsgRcvr,DocumentListener, PopupL
 		if(msg != null){
 			tf = (TextFile)msg;
 			doc = ((TextFile)msg).getDocument();
-			pos = ((TextFile)msg).getCurrentPosition();
-			System.err.println("fuck yeah");
-			System.out.println(doc);
-			System.out.println(pos);
 		}else
 			System.err.println("so strange - null msg");
 		//System.out.println(doc);
@@ -49,8 +44,7 @@ public class TextTest extends Module implements MsgRcvr,DocumentListener, PopupL
 	public void insertUpdate(DocumentEvent e){
 		
 		System.out.println("up!");
-		pos = tf.getCurrentPosition();
-		doc.removeDocumentListener(this);
+		//doc.removeDocumentListener(this);
 	/*	Thread t = new Thread(new Runnable(){
 			public void run(){
 				try {
@@ -90,11 +84,11 @@ public class TextTest extends Module implements MsgRcvr,DocumentListener, PopupL
 		System.out.println("user agreed with "+s);
 		
 		// try to do some inserts
-		try {
+		/*try {
 			doc.insertString(1, "blaaaaaaaa", null);
 		} catch(BadLocationException ex) {
 			ex.printStackTrace();
-		}
+		}*/
 	}
 	
 	

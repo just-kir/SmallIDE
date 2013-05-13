@@ -83,10 +83,10 @@ public class PopupMenu{
 	
 	public void hide(){
 		if(isShown()){
+			c.removeKeyListener(list);
 			shown = false;
 			frame.getLayeredPane().remove(panel);
 			frame.repaint();
-			c.removeKeyListener(list);
 			if(popuplistener!= null) popuplistener.hide();
 		}else
 			System.err.println("try to hide when not shown");

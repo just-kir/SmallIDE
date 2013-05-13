@@ -110,7 +110,7 @@ public class Main {
 		} catch (Exception ex){
 			ex.printStackTrace();
 		}
-		Module mtest = new Module(mf,rp,conf) {
+		/*Module mtest = new Module(mf,rp,conf) {
 			
 			@Override
 			public void buttonClick(int index) {
@@ -133,7 +133,7 @@ public class Main {
 				russianpost.send("ShowPopupMenu", p);
 			}
 		};
-		mf.addButton(new ImageIcon("document-save.png"), mtest);
+		mf.addButton(new ImageIcon("document-save.png"), mtest);*/
 		// some magic
 		/*Class cs = Class.forName(line);
 		Class[] types = {MainFrame.class, RussianPost.class, Configuration.class};
