@@ -1,0 +1,2 @@
+syn keyword JavaKeyWords public
+hi JavaKeyWords gui=bold guifg=#7f0055
