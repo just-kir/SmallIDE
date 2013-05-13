@@ -90,6 +90,7 @@ public class TextEditor extends GraphicsModule{
 				
 				pm = (PopupMenu) msg;
 				tp = documents.get(getActiveTab()).getTextPane();
+				//System.out.println(tp.getCaret().getMagicCaretPosition().x + " " + tp.getCaret().getMagicCaretPosition().y);
 				pm.show(tp, tp.getCaret().getMagicCaretPosition().x, tp.getCaret().getMagicCaretPosition().y+tp.getFontMetrics(tp.getFont()).getHeight());
 			}
 		}
@@ -204,8 +205,8 @@ public class TextEditor extends GraphicsModule{
 			return tp.getDocument();
 		}
 		
-		public int getCurrentPosition(){
-			return tp.getCaretPosition();
+		public Caret getCaret(){
+			return tp.getCaret();
 		}
 		
 		public File getFile() {
