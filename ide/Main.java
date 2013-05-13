@@ -19,6 +19,7 @@ import java.lang.reflect.InvocationTargetException;
 
 import mainframe.GraphicsModule;
 import mainframe.MainFrame;
+import modules.PopupListener;
 import modules.PopupMenu;
 import modules.SingleFileProjectManager;
 import modules.TextEditor;
@@ -113,7 +114,23 @@ public class Main {
 			
 			@Override
 			public void buttonClick(int index) {
-				russianpost.send("ShowPopupMenu", PopupMenu.getInstance(mainframe.getFrame()));
+				PopupMenu p = PopupMenu.getInstance(mainframe.getFrame());
+				p.clear();
+				p.add("fuck");
+				p.add("let fuck right now %)");
+				p.setPopupListener(new PopupListener() {
+					
+					@Override
+					public void hide() {
+						System.out.println("hide this fuckkinn menu");
+					}
+					
+					@Override
+					public void accept(String s) {
+						System.out.println("user agreed with "+s);
+					}
+				});
+				russianpost.send("ShowPopupMenu", p);
 			}
 		};
 		mf.addButton(new ImageIcon("document-save.png"), mtest);

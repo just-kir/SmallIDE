@@ -35,7 +35,6 @@ public class PopupMenu{
 	private PopupMenu(JFrame fr) {
 		frame = fr;
 		v=new Vector<String>();
-		v.add("test yopta");
 		list = new List(v);  
 		panel = new JScrollPane(list);
 		
@@ -62,6 +61,10 @@ public class PopupMenu{
 		v.remove(s);
 	}
 	
+	public void setPopupListener(PopupListener popuplistener) {
+		this.popuplistener = popuplistener;
+	}
+	
 	public void show(JComponent c, int x, int y){
 		if(!isShown()){
 			this.c = c;
@@ -70,6 +73,7 @@ public class PopupMenu{
 			Point p = c.getLocationOnScreen();
 			panel.setBounds(p.x+x-frp.x, p.y+y-frp.y, 300, 200);
 			frame.getLayeredPane().add(panel,JLayeredPane.POPUP_LAYER);
+			panel.repaint();
 			shown = true;
 			list.setSelectedIndex(0);
 			c.grabFocus();
@@ -80,8 +84,8 @@ public class PopupMenu{
 	public void hide(){
 		if(isShown()){
 			shown = false;
-			frame.repaint();
 			frame.getLayeredPane().remove(panel);
+			frame.repaint();
 			c.removeKeyListener(list);
 			if(popuplistener!= null) popuplistener.hide();
 		}else
