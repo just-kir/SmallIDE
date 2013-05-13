@@ -11,6 +11,7 @@ import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
@@ -59,6 +60,7 @@ public class TextEditor extends GraphicsModule{
 	private TabChangeListener tabchangelistener;
 	private InputMap im = null;
 	private ActionMap am = null;
+	private PopupMenu pm = null;
 	
 	private class KeyBindingsManager implements MsgRcvr{
 
@@ -75,34 +77,38 @@ public class TextEditor extends GraphicsModule{
 		
 	}
 	
-	private class PopupMenuManager implements MsgRcvr, CaretListener{
+	private class PopupManager implements MsgRcvr{
 		private JTextPane tp = null;
-		private PopupMenu pm = null;
-		private int skip = 0;
 		
-		public PopupMenuManager() {
+		public PopupManager() {
 			TextEditor.this.russianpost.addIncPostBox("ShowPopupMenu", this);
 		}
 
 		@Override
 		public void handle(Object msg) {
 			if(msg instanceof PopupMenu && msg!=null){
+				
 				pm = (PopupMenu) msg;
 				tp = documents.get(getActiveTab()).getTextPane();
 				pm.show(tp, tp.getCaret().getMagicCaretPosition().x, tp.getCaret().getMagicCaretPosition().y+tp.getFontMetrics(tp.getFont()).getHeight());
-				skip = pm.getSkip();
-				tp.addCaretListener(this);
 			}
 		}
-
+	}
+	
+	private class TextPaneWithPopup extends JTextPane{
+		
+		public TextPaneWithPopup() {
+			super();
+		}
+		
 		@Override
-		public void caretUpdate(CaretEvent e) {
-			if((skip--) <= 0){
+		protected void processKeyEvent(KeyEvent e) {
+			if(pm != null && pm.isShown() && e.getKeyCode() != KeyEvent.VK_DOWN && e.getKeyCode() != KeyEvent.VK_UP && e.getKeyCode() != KeyEvent.VK_ESCAPE && e.getKeyCode() != KeyEvent.VK_ENTER){
 				pm.hide();
-				tp.removeCaretListener(this);
-				tp.grabFocus();
 			}
+			super.processKeyEvent(e);
 		}
+		
 	}
 	
 	private class SetTab implements MsgRcvr{
@@ -285,7 +291,7 @@ public class TextEditor extends GraphicsModule{
 		tabchangelistener = new TabChangeListener();
 		new SetTab();
 		new OpenFile();
-		new PopupMenuManager();
+		new PopupManager();
 		JTextPane tp = new JTextPane();
 		im = tp.getInputMap();
 		am = tp.getActionMap();
@@ -359,7 +365,7 @@ public class TextEditor extends GraphicsModule{
 	private void open(File f){
 		JPanel p = mainframe.addGraphicsModule(this, MainFrame.TOP, f.getName());
 		p.setLayout(new BorderLayout(0,0)); 
-		JTextPane tp = new JTextPane();
+		JTextPane tp = new TextPaneWithPopup();
 		tp.setInputMap(JComponent.WHEN_FOCUSED, im);
 		tp.setActionMap(am);
 		TextFile tf = new TextFile(f, tp, p);
