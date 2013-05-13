@@ -53,6 +53,8 @@ public class MainFrame extends WindowAdapter implements Runnable, ChangeListener
 	private RussianPost rp;
 	private OutBox topChange;
 	
+	private JTabbedPane z; // for changing tab sync
+	
 	public MainFrame(RussianPost rp) {
 		this.rp = rp;
 		try {
@@ -193,7 +195,6 @@ public class MainFrame extends WindowAdapter implements Runnable, ChangeListener
 	}
 	
 	public JPanel addGraphicsModule(GraphicsModule gm, int where, String name){
-		JTabbedPane z;
 		switch(where){
 		case TOP:
 			z = top;
@@ -215,8 +216,8 @@ public class MainFrame extends WindowAdapter implements Runnable, ChangeListener
 		JPanel res = new JPanel();
 		res.setName(name);
 		z.addTab(name, res);
-		z.setTabComponentAt(z.indexOfComponent(res), tc);
 		z.setSelectedComponent(res);
+		z.setTabComponentAt(z.indexOfComponent(res), tc);
 		return res;
 	}
 	

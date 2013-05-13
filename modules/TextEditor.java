@@ -40,6 +40,7 @@ import javax.swing.event.CaretListener;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
+import javax.swing.text.Caret;
 import javax.swing.text.Document;
 import javax.swing.text.PlainDocument;
 import javax.swing.text.StyledDocument;
@@ -192,6 +193,10 @@ public class TextEditor extends GraphicsModule{
 			return tp.getDocument();
 		}
 		
+		public int getCurrentPosition(){
+			return tp.getCaretPosition();
+		}
+		
 		public File getFile() {
 			return f;
 		}
@@ -241,7 +246,11 @@ public class TextEditor extends GraphicsModule{
 		
 		@Override
 		public void handle(Object msg) {
-			outChange.putAndSend(msg == null ? null : TextEditor.this.documents.get(msg));
+			if(msg != null){
+				TextFile tf = TextEditor.this.documents.get(msg);
+				if(tf != null)
+					outChange.putAndSend(tf);
+			}
 		}
 		
 		public void open(TextFile doc){
@@ -356,6 +365,7 @@ public class TextEditor extends GraphicsModule{
 		//sp.setSize(p.getSize());
 		p.add(sp,BorderLayout.CENTER);
 		documents.put(p, tf);
+		tabchangelistener.handle(p);
 		tabchangelistener.open(tf);
 	}
 	
