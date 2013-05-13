@@ -31,6 +31,7 @@ public class PopupMenu{
 	private List list;
 	private Vector<String> v;
 	private PopupListener popuplistener = null;
+	private int skip;
 	
 	private PopupMenu(JFrame fr) {
 		frame = fr;
@@ -43,6 +44,14 @@ public class PopupMenu{
 	public static PopupMenu getInstance(JFrame fr){
 		if(instance == null) instance = new PopupMenu(fr);
 		return instance;
+	}
+	
+	public int getSkip() {
+		return skip;
+	}
+	
+	public void setSkip(int skip) {
+		this.skip = skip;
 	}
 	
 	public boolean isShown() {

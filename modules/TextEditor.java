@@ -78,6 +78,7 @@ public class TextEditor extends GraphicsModule{
 	private class PopupMenuManager implements MsgRcvr, CaretListener{
 		private JTextPane tp = null;
 		private PopupMenu pm = null;
+		private int skip = 0;
 		
 		public PopupMenuManager() {
 			TextEditor.this.russianpost.addIncPostBox("ShowPopupMenu", this);
@@ -89,15 +90,18 @@ public class TextEditor extends GraphicsModule{
 				pm = (PopupMenu) msg;
 				tp = documents.get(getActiveTab()).getTextPane();
 				pm.show(tp, tp.getCaret().getMagicCaretPosition().x, tp.getCaret().getMagicCaretPosition().y+tp.getFontMetrics(tp.getFont()).getHeight());
+				skip = pm.getSkip();
 				tp.addCaretListener(this);
 			}
 		}
 
 		@Override
 		public void caretUpdate(CaretEvent e) {
-			pm.hide();
-			tp.removeCaretListener(this);
-			tp.grabFocus();
+			if((skip--) <= 0){
+				pm.hide();
+				tp.removeCaretListener(this);
+				tp.grabFocus();
+			}
 		}
 	}
 	
