@@ -1,6 +1,7 @@
 package mainframe;
 
 import ide.ConflictException;
+import ide.Main;
 import ide.Module;
 import ide.OutBox;
 import ide.RussianPost;
@@ -8,6 +9,8 @@ import ide.RussianPost;
 import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Graphics;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.lang.reflect.InvocationTargetException;
 
 import javax.swing.Icon;
@@ -21,12 +24,13 @@ import javax.swing.JPanel;
 import javax.swing.JSplitPane;
 import javax.swing.JTabbedPane;
 import javax.swing.JToolBar;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
 
-public class MainFrame implements Runnable, ChangeListener{
+public class MainFrame extends WindowAdapter implements Runnable, ChangeListener{
 	public static final int TOP = 1;
 	public static final int BOTTOM = 2;
 	public static final int LEFT = 3;
@@ -71,7 +75,8 @@ public class MainFrame implements Runnable, ChangeListener{
 		frame = new JFrame("SmallIDE");
 		frame.setVisible(false);
 		
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.addWindowListener(this);
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
 		frame.setSize(900,600);
 		frame.setLayout(new BorderLayout());
 		
@@ -115,7 +120,7 @@ public class MainFrame implements Runnable, ChangeListener{
 		
 	}
 	
-	public int addMenu(String path, Module m) throws ConflictException{
+	public int addMenu(String path, Module m, KeyStroke binding) throws ConflictException{
 		//System.out.println("fuck");
 		menubar.setVisible(false);
 		String[] ss = path.split("/");
@@ -171,6 +176,7 @@ public class MainFrame implements Runnable, ChangeListener{
 		}
 		if(i == l){
 			MenuItem nmi = new MenuItem(ss[ss.length-1], menuIndex, m);
+			if(binding != null) nmi.setAccelerator(binding);
 			jm.add(nmi);
 		}
 		menubar.setVisible(true);
@@ -207,6 +213,7 @@ public class MainFrame implements Runnable, ChangeListener{
 		}
 		JPanel tc = new ButtonTabComponent(z, gm);
 		JPanel res = new JPanel();
+		res.setName(name);
 		z.addTab(name, res);
 		z.setTabComponentAt(z.indexOfComponent(res), tc);
 		z.setSelectedComponent(res);
@@ -260,5 +267,11 @@ public class MainFrame implements Runnable, ChangeListener{
 	@Override
 	public void stateChanged(ChangeEvent arg0) {
 		topChange.putAndSend(getActiveTab(TOP));
+	}
+	
+	@Override
+	public void windowClosing(WindowEvent e) {
+		Main.tryClose();
+		
 	}
 }

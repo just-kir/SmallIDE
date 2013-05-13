@@ -1,2 +1,3 @@
-test.AlphaModule
-test.AlphaModule
+modules.TextEditor
+modules.SingleFileProjectManager
+modules.Compiler

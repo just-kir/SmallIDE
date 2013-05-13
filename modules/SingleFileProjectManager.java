@@ -2,11 +2,18 @@ package modules;
 
 import java.awt.BorderLayout;
 import java.awt.Component;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 
 import javax.swing.DefaultListModel;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
+import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
@@ -24,6 +31,12 @@ import ide.RussianPost;
 
 public class SingleFileProjectManager extends GraphicsModule implements ListSelectionListener {
 	private final int SHOW;
+	private final int NEW;
+	private final int NEW_MENU;
+	private final int COMPILE;
+	private final int COMPILE_MENU;
+	private final int RUN;
+	private final int RUN_MENU;
 	private boolean closed;
 	private JPanel panel;
 	private JList<TextFile> list;
@@ -32,13 +45,28 @@ public class SingleFileProjectManager extends GraphicsModule implements ListSele
 		super(mf, rp, conf);
 		panel = mf.addGraphicsModule(this, MainFrame.LEFT, "Files");
 		int show;
+		int run_menu;
+		int compile_menu;
+		int new_menu;
 		try {
-			show = mf.addMenu("Window/Opened files manager", this);
+			show = mf.addMenu("Window/File manager", this, null);
+			run_menu = mf.addMenu("Run/Run", this, KeyStroke.getKeyStroke("ctrl F11"));
+			compile_menu = mf.addMenu("Run/Compile", this, KeyStroke.getKeyStroke("F11"));
+			new_menu = mf.addMenu("File/New", this, KeyStroke.getKeyStroke("ctrl N"));
 		} catch (ConflictException e) {
 			show = -1;
+			run_menu = -1;
+			compile_menu = -1;
+			new_menu = -1;
 			e.printStackTrace();
 		}
 		SHOW = show;
+		RUN_MENU = run_menu;
+		COMPILE_MENU = compile_menu;
+		NEW_MENU = new_menu;
+		NEW = mf.addButton(new ImageIcon("document-new.png"), this);
+		COMPILE = mf.addButton(new ImageIcon("run-build-configure.png"), this);
+		RUN = mf.addButton(new ImageIcon("run.png"), this);
 		DefaultListModel<TextFile> dlm = new DefaultListModel<TextFile>();
 		list = new JList<TextFile>(dlm);
 		list.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -48,6 +76,47 @@ public class SingleFileProjectManager extends GraphicsModule implements ListSele
 		new OnChange();
 		new OnClose();
 		new OnOpen();
+	}
+	
+	@Override
+	public void menuClick(int index) {
+		if(index == SHOW && closed){
+			panel = mainframe.addGraphicsModule(this, MainFrame.LEFT, "Files");
+			panel.setLayout(new BorderLayout(0,0));
+			panel.add(new JScrollPane(list), BorderLayout.CENTER);
+		}
+		if(index == RUN_MENU)
+			buttonClick(RUN);
+		if(index == COMPILE_MENU)
+			buttonClick(COMPILE);
+		if(index == NEW_MENU)
+			buttonClick(NEW);
+	}
+	
+	@Override
+	public void buttonClick(int index) {
+		if(index == NEW){
+			JFileChooser fc = new JFileChooser();
+			fc.setDialogTitle("New file");
+			fc.setFileSelectionMode(JFileChooser.FILES_ONLY);
+			int res = fc.showDialog(mainframe.getFrame(), "Create");
+			if (res == JFileChooser.APPROVE_OPTION){
+				File f = fc.getSelectedFile();
+				try {
+					f.createNewFile();
+					russianpost.send("OpenFile", f);
+				} catch (IOException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		}
+		if(index == COMPILE){
+			russianpost.send("Compile", list.getSelectedValue().getFile());
+		}
+		if(index == RUN){
+			russianpost.send("Run", list.getSelectedValue().getFile());
+		}
 	}
 
 	@Override
@@ -86,6 +155,7 @@ public class SingleFileProjectManager extends GraphicsModule implements ListSele
 			int z = dlm.indexOf(msg);
 			SingleFileProjectManager.this.list.setSelectedIndex(z);
 			SingleFileProjectManager.this.list.addListSelectionListener(SingleFileProjectManager.this);
+			SingleFileProjectManager.this.panel.repaint();
 		}
 		
 	}

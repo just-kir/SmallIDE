@@ -25,7 +25,7 @@ public class ButtonTabComponent extends JPanel {
             public String getText() {
                 int i = pane.indexOfTabComponent(ButtonTabComponent.this);
                 if (i != -1) {
-                    return pane.getTitleAt(i);
+                    return pane.getComponentAt(i).getName();
                 }
                 return null;
             }

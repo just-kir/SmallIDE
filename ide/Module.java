@@ -19,4 +19,19 @@ public abstract class Module {
 	
 	public void buttonClick(int index){
 	}
+	
+	/*
+	 * false - ready to exit
+	 * true - not ready
+	 * if one of modules say true exitting will be cancelled
+	 */
+	
+	public boolean onExit(){
+		return false;
+	}
+	
+	@Override
+	public String toString() {
+		return this.getClass().getCanonicalName();
+	}
 }
