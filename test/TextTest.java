@@ -18,6 +18,9 @@ import javax.swing.text.*;
 public class TextTest extends Module implements MsgRcvr,DocumentListener, PopupListener{
 	private Document doc;
 	private TextFile tf;
+	int pos = 1;
+	Caret p;
+	String autoc;
 	
 	public TextTest(MainFrame mf, RussianPost rp, Configuration conf){
 		super(mf, rp, conf);
@@ -59,8 +62,22 @@ public class TextTest extends Module implements MsgRcvr,DocumentListener, PopupL
 			}
 		});
 		t.start();*/
-		Event("bla-bla");
-		System.out.println(tf.getCurrentPosition());
+		
+		// now it works just for dots
+		
+		p = tf.getCaret();
+		pos = p.getDot();
+		String text = "";
+		try {
+			text = doc.getText(pos, 1);
+			System.out.println(text);
+		} catch (BadLocationException ex) {
+			ex.printStackTrace();
+		}
+		System.out.println(text.length());
+		if (text.equals(".")) {Event("bla-bla");}
+		
+		//System.out.println(tf.getCurrentPosition());
 		
 	}
 	
@@ -68,8 +85,8 @@ public class TextTest extends Module implements MsgRcvr,DocumentListener, PopupL
 		PopupMenu p = PopupMenu.getInstance(mainframe.getFrame());
 		//p.setSkip(2);
 		p.clear();
-		p.add("fuck");
-		p.add("let fuck right now %)");
+		p.add("get()");
+		p.add("put()");
 		p.add("anton pupsik");
 		p.setPopupListener(this);
 		russianpost.send("ShowPopupMenu", p);
@@ -82,6 +99,32 @@ public class TextTest extends Module implements MsgRcvr,DocumentListener, PopupL
 	
 	public void accept(String s) {
 		System.out.println("user agreed with "+s);
+		autoc = s;
+		// get curet
+		p = tf.getCaret();
+		pos = p.getDot();
+		System.out.println(s);
+		
+		doc.removeDocumentListener(this);
+		
+		Thread t = new Thread(new Runnable(){
+			public void run(){
+				try {
+					String s = TextTest.this.autoc;
+					TextTest.this.doc.insertString(TextTest.this.pos, s, null);
+					doc.addDocumentListener(TextTest.this);
+					//String s = "blaaaaa";
+					pos =pos +  s.length();
+					p.setDot(pos);
+				} catch(BadLocationException ex) {
+					ex.printStackTrace();
+				}
+			}
+		});
+		t.start();
+		
+		
+		
 		
 		// try to do some inserts
 		/*try {
