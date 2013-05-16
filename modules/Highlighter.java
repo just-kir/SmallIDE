@@ -77,7 +77,15 @@ public class Highlighter extends Module implements MsgRcvr,DocumentListener{
 					if(sas!=null && s != null){
 						start = text.indexOf(words[i], end);
 						end = start+words[i].length();
-						doc.setCharacterAttributes(start, words[i].length(), sas, false);
+						final int specstart = start;
+						final SimpleAttributeSet specsas = sas;
+						final int l = words[i].length();
+						Thread t = new Thread(new Runnable(){
+							public void run(){
+								doc.setCharacterAttributes(specstart, l, specsas, false);
+							}
+						});
+						t.start();
 					}
 					//System.out.println(words[i]+"/"+s+"/"+c+"/"+start+"/"+end);
 				}
