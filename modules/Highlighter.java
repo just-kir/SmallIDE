@@ -1,12 +1,14 @@
 package modules;
 
 import java.awt.Color;
+import java.awt.EventQueue;
 import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Hashtable;
+import java.util.Iterator;
 import java.util.Scanner;
 import java.util.Vector;
 
@@ -15,6 +17,7 @@ import javax.swing.event.DocumentListener;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.Document;
 import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.Style;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
@@ -27,6 +30,7 @@ import ide.RussianPost;
 
 public class Highlighter extends Module implements MsgRcvr,DocumentListener{
 	private StyledDocument doc;
+	private Style normal;
 	private Hashtable<String, SimpleAttributeSet> styles;
 	private Hashtable<String, String> keywords;
 	
@@ -44,6 +48,8 @@ public class Highlighter extends Module implements MsgRcvr,DocumentListener{
 		if(msg != null){
 			if(doc != null) doc.removeDocumentListener(this);
 			doc = (StyledDocument)(((TextFile)msg).getDocument());
+			if((normal = doc.getStyle("normal")) == null)
+				normal = doc.addStyle("normal", null);
 			doc.addDocumentListener(this);
 		}
 	}
@@ -64,6 +70,11 @@ public class Highlighter extends Module implements MsgRcvr,DocumentListener{
 	
 	private void repaint(){
 		try {
+			EventQueue.invokeLater(new Runnable(){
+				public void run(){
+					doc.setCharacterAttributes(0, doc.getLength(), normal, true);
+				}
+			});
 			String text = doc.getText(0, doc.getLength());
 			String[] words = text.split("\\W");
 			int start = 0;
@@ -80,15 +91,23 @@ public class Highlighter extends Module implements MsgRcvr,DocumentListener{
 						final int specstart = start;
 						final SimpleAttributeSet specsas = sas;
 						final int l = words[i].length();
-						Thread t = new Thread(new Runnable(){
+						EventQueue.invokeLater(new Runnable(){
 							public void run(){
 								doc.setCharacterAttributes(specstart, l, specsas, false);
 							}
 						});
-						t.start();
 					}
 					//System.out.println(words[i]+"/"+s+"/"+c+"/"+start+"/"+end);
 				}
+			}
+			Vector<SpecialHighlighting> spec = searchSpecial(text);
+			for (Iterator iterator = spec.iterator(); iterator.hasNext();) {
+				final SpecialHighlighting sp = (SpecialHighlighting) iterator.next();
+				EventQueue.invokeLater(new Runnable(){
+					public void run(){
+						doc.setCharacterAttributes(sp.start, sp.end-sp.start, styles.get(sp.type), false);
+					}
+				});
 			}
 		} catch (BadLocationException e) {
 			// TODO Auto-generated catch block
@@ -169,7 +188,31 @@ public class Highlighter extends Module implements MsgRcvr,DocumentListener{
 	}
 	
 	private Vector<SpecialHighlighting> searchSpecial(String text){
-		Vector<SpecialHighlighting> res = new Vector<SpecialHighlighting>(); 
+		Vector<SpecialHighlighting> res = new Vector<SpecialHighlighting>();
+		int i = 0;
+		while(i < text.length()){
+			int start;
+			int end;
+			start = text.indexOf("/*",i);
+			if(start == -1) break;
+			end = text.indexOf("*/", start)+1;
+			if(end == 0) end = text.length()-1;
+			SpecialHighlighting sp = new SpecialHighlighting(start, end, "Comments");
+			res.add(sp);
+			i = end;
+		}
+		i = 0;
+		while(i < text.length()){
+			int start;
+			int end;
+			start = text.indexOf("//",i);
+			if(start == -1) break;
+			end = text.indexOf("\n", start);
+			if(end == -1) end = text.length()-1;
+			SpecialHighlighting sp = new SpecialHighlighting(start, end, "Comments");
+			res.add(sp);
+			i = end;
+		}
 		return res;
 	}
 	

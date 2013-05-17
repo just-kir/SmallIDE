@@ -1,5 +1,7 @@
 package test;
 
+import java.awt.EventQueue;
+
 import ide.Configuration;
 import ide.Module;
 import ide.MsgRcvr;
@@ -46,7 +48,7 @@ public class TextTest extends Module implements MsgRcvr,DocumentListener, PopupL
 	
 	public void insertUpdate(DocumentEvent e){
 		
-		System.out.println("up!");
+		//System.out.println("up!");
 		//doc.removeDocumentListener(this);
 	/*	Thread t = new Thread(new Runnable(){
 			public void run(){
@@ -70,11 +72,11 @@ public class TextTest extends Module implements MsgRcvr,DocumentListener, PopupL
 		String text = "";
 		try {
 			text = doc.getText(pos, 1);
-			System.out.println(text);
+			//System.out.println(text);
 		} catch (BadLocationException ex) {
 			ex.printStackTrace();
 		}
-		System.out.println(text.length());
+		//System.out.println(text.length());
 		if (text.equals(".")) {Event("bla-bla");}
 		
 		//System.out.println(tf.getCurrentPosition());
@@ -107,7 +109,7 @@ public class TextTest extends Module implements MsgRcvr,DocumentListener, PopupL
 		
 		doc.removeDocumentListener(this);
 		
-		Thread t = new Thread(new Runnable(){
+		EventQueue.invokeLater(new Runnable(){
 			public void run(){
 				try {
 					String s = TextTest.this.autoc;
@@ -121,7 +123,6 @@ public class TextTest extends Module implements MsgRcvr,DocumentListener, PopupL
 				}
 			}
 		});
-		t.start();
 		
 		
 		

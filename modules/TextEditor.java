@@ -103,6 +103,11 @@ public class TextEditor extends GraphicsModule{
 		}
 		
 		@Override
+		public boolean getScrollableTracksViewportWidth() {
+			return false;
+		}
+		
+		@Override
 		protected void processKeyEvent(KeyEvent e) {
 		
 			if(e.getKeyCode() == KeyEvent.VK_UNDEFINED && pm != null && pm.isShown() && e.getKeyCode() != KeyEvent.VK_DOWN && e.getKeyCode() != KeyEvent.VK_UP && e.getKeyCode() != KeyEvent.VK_ESCAPE && e.getKeyCode() != KeyEvent.VK_ENTER){
